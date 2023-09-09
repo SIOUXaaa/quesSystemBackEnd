@@ -1,1 +1,2 @@
-configs/mysql/data/
+configs/mysql/data/*
+!configs/mysql/data/
