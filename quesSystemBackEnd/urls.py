@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('surveyResponses/get/', SurveyResponsesView.as_view()),
     path('surveyResponses/post/', SurveyResponsesView.as_view()),
+    path('project/get_all/', ProjectView.as_view()),
     path('project/get/', ProjectView.as_view()),
     path('project/post/', ProjectView.as_view()),
     path('project/put/', ProjectView.as_view()),

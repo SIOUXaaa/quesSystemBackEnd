@@ -12,27 +12,52 @@ class ProjectView(APIView):
 
     def get(self, request):
         project_id = request.GET.get('project_id')
-        project = Project.objects.get(pk=project_id)
-        serializer = ProjectSerializer(project)
-        return Response(serializer.data)
+
+        if project_id:
+            try:
+                project = Project.objects.get(pk=project_id)
+            except:
+                return Response({'msg': 'project not exist'}, status=status.HTTP_400_BAD_REQUEST)
+            serializer = ProjectSerializer(project)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            projects = Project.objects.all()
+            serializer = ProjectSerializer(projects, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = ProjectSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     # 修改project信息，包括project_name, description
     def put(self, request):
         project_id = request.POST.get('project_id')
-        project = Project.objects.get(pk=project_id)
+        try:
+            project = Project.objects.get(pk=project_id)
+        except:
+            return Response({'msg': 'project not exist'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ProjectSerializer(project, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request):
         project_id = request.GET.get('project_id')
-        project = Project.objects.get(pk=project_id)
-        project.delete()
-        return Response({'msg': 'success'}, status=status.HTTP_200_OK)
+        try:
+            project = Project.objects.get(pk=project_id)
+        except:
+            return Response({'msg': 'project not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if project:
+            project.delete()
+            return Response({'msg': 'success'}, status=status.HTTP_200_OK)
+
+        return Response({'msg': 'project not exist'}, status=status.HTTP_400_BAD_REQUEST)
