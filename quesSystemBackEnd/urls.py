@@ -16,10 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from web.views import QuestionView
+from web.views.SurveyResponses import SurveyResponsesView
+from web.views.Project import ProjectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('question/get/', QuestionView.as_view()),
-    path('question/post/', QuestionView.as_view()),
+    path('surveyResponses/get/', SurveyResponsesView.as_view()),
+    path('surveyResponses/post/', SurveyResponsesView.as_view()),
+    path('project/get/', ProjectView.as_view()),
+    path('project/post/', ProjectView.as_view()),
+    path('project/put/', ProjectView.as_view()),
+    path('project/delete/', ProjectView.as_view()),
 ]

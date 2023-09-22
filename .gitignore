@@ -1,2 +1,4 @@
 configs/mysql/data/*
 !configs/mysql/data/.gitkeep
+**/__pycache__
+*.pyc

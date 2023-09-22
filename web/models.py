@@ -83,7 +83,8 @@ class DjangoAdminLog(models.Model):
     object_repr = models.CharField(max_length=200)
     action_flag = models.PositiveSmallIntegerField()
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey(
+        'DjangoContentType', models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
 
     class Meta:
@@ -121,14 +122,23 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+class Project(models.Model):
+    project_id = models.CharField(max_length=255, primary_key=True)
+    project_name = models.CharField(max_length=255)
+    description = models.TextField()
+    
+    class Meta:
+        managed = True
+        db_table = 'project'
 
-class Question(models.Model):
-    question_id = models.CharField(primary_key=True, max_length=255)
+class SurveyResponses(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user_id = models.CharField(max_length=255)
     answer = models.JSONField()
-    time = models.DateTimeField()
+    time = models.DateTimeField(auto_now_add=True)
     ip = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
-        db_table = 'question'
+        managed = True
+        db_table = 'survey_responses'
+
