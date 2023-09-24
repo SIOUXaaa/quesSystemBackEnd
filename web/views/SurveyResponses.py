@@ -45,12 +45,12 @@ class SurveyResponsesView(APIView):
 
     def post(self, request):
         project = request.data.get('project')
+        print(request.data)
+        print(project)
         # 查询 project表是否存在project_id
         project = Project.objects.filter(pk=project)
         if not project:
             return Response({'msg:': 'project not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-        print(request.data)
 
         serializer = SurveyResponsesSerializer(data=request.data)
         serializer.project = project

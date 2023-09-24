@@ -36,12 +36,13 @@ class ProjectView(APIView):
 
     # 修改project信息，包括project_name, description
     def put(self, request):
-        project_id = request.POST.get('project_id')
+        project_id = request.data.get('project_id')
         try:
             project = Project.objects.get(pk=project_id)
         except:
             return Response({'msg': 'project not exist'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ProjectSerializer(project, data=request.data)
+        print(serializer)
 
         if serializer.is_valid():
             serializer.save()
