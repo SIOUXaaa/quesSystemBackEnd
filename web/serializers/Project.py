@@ -5,7 +5,6 @@ from web.models import Project
 from django.conf import settings
 
 #生成Project model对应的serializers
-
 class ProjectSerializer(serializers.Serializer):
     project_id = serializers.CharField(max_length=255)
     project_name = serializers.CharField(max_length=255)
