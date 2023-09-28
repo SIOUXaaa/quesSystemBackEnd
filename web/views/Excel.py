@@ -1,3 +1,4 @@
+from io import BytesIO
 import pandas as pd
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,6 +7,7 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 
 from web.models import SurveyResponses
 from web.serializers.SurveyResponses import SurveyResponsesSerializer
+from django.http import StreamingHttpResponse
 
 
 class ExcelView(APIView):
@@ -15,12 +17,9 @@ class ExcelView(APIView):
         project = request.GET.get('project')
         survey_responses = SurveyResponses.objects.filter(project=project)
 
-        serializer = SurveyResponsesSerializer(survey_responses, many=True)
-
+        # 数据解析
         data = list(survey_responses.values())
         converted_data = []
-
-        print(data)
         for item in data:
             converted_item = {
                 "project":  item['project_id'],
@@ -35,14 +34,15 @@ class ExcelView(APIView):
 
         df = pd.DataFrame(converted_data)
 
-        excel_file = '/home/sercoi/FintechRa/backEnd/quesSystemBackEnd/web/excel/'+project+'.xlsx'
+        excel_file = BytesIO()
         df.to_excel(excel_file, index=False)
+        
+        # 重置文件指针
+        excel_file.seek(0)
 
-        response = Response(
-            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        # 设置下载xlsx相关的response属性
+        response = StreamingHttpResponse(excel_file,
+                                         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = f"attachment;filename={project}.xlsx"
-
-        with open(excel_file, "rb") as f:
-            response.write(f.read())
 
         return response
