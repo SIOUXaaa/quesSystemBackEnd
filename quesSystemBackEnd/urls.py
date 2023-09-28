@@ -18,6 +18,7 @@ from django.urls import path
 
 from web.views.SurveyResponses import SurveyResponsesView
 from web.views.Project import ProjectView
+from web.views.Excel import ExcelView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +29,5 @@ urlpatterns = [
     path('project/post/', ProjectView.as_view()),
     path('project/put/', ProjectView.as_view()),
     path('project/delete/', ProjectView.as_view()),
+    path('excel/get/', ExcelView.as_view()),
 ]
