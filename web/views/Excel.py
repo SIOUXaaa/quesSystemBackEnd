@@ -36,7 +36,7 @@ class ExcelView(APIView):
 
         excel_file = BytesIO()
         df.to_excel(excel_file, index=False)
-        
+
         # 重置文件指针
         excel_file.seek(0)
 
@@ -44,5 +44,11 @@ class ExcelView(APIView):
         response = StreamingHttpResponse(excel_file,
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = f"attachment;filename={project}.xlsx"
+        response['Access-Control-Expose-Headers'] = 'Content-Disposition'
+        
+        # # 添加 CORS 头部
+        # response["Access-Control-Allow-Origin"] = "*"
+        # response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        # response["Access-Control-Allow-Headers"] = "*"
 
         return response
