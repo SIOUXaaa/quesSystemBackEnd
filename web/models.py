@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
@@ -122,14 +122,16 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+
 class Project(models.Model):
     project_id = models.CharField(max_length=255, primary_key=True)
     project_name = models.CharField(max_length=255)
     description = models.TextField()
-    
+
     class Meta:
         managed = True
         db_table = 'project'
+
 
 class SurveyResponses(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -142,3 +144,36 @@ class SurveyResponses(models.Model):
         managed = True
         db_table = 'survey_responses'
 
+
+class UserManager(BaseUserManager):
+    def create_user(self, username, password=None, **extra_fields):
+        if not username:
+            raise ValueError('The Username field must be set')
+
+        user = self.model(username=username, **extra_fields)
+        user.password = password
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(username, password, **extra_fields)
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    groups = models.ManyToManyField(Group, related_name='web_users')
+    user_permissions = models.ManyToManyField(Permission, related_name='web_users')
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'username'
+    class Meta:
+        managed = True
+        db_table = 'user'

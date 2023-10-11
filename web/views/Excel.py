@@ -3,15 +3,18 @@ import pandas as pd
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from web.models import SurveyResponses
-from web.serializers.SurveyResponses import SurveyResponsesSerializer
 from django.http import StreamingHttpResponse
 
 
 class ExcelView(APIView):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         project = request.GET.get('project')
@@ -45,10 +48,5 @@ class ExcelView(APIView):
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = f"attachment;filename={project}.xlsx"
         response['Access-Control-Expose-Headers'] = 'Content-Disposition'
-        
-        # # 添加 CORS 头部
-        # response["Access-Control-Allow-Origin"] = "*"
-        # response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        # response["Access-Control-Allow-Headers"] = "*"
 
         return response
