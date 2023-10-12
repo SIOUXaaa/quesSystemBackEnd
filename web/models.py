@@ -145,35 +145,47 @@ class SurveyResponses(models.Model):
         db_table = 'survey_responses'
 
 
-class UserManager(BaseUserManager):
-    def create_user(self, username, password=None, **extra_fields):
-        if not username:
-            raise ValueError('The Username field must be set')
+# class UserManager(BaseUserManager):
+#     def create_user(self, username, password=None, **extra_fields):
+#         if not username:
+#             raise ValueError('The Username field must be set')
 
-        user = self.model(username=username, **extra_fields)
-        user.password = password
-        user.save(using=self._db)
-        return user
+#         user = self.model(username=username, **extra_fields)
+#         user.password = password
+#         user.save(using=self._db)
+#         return user
 
-    def create_superuser(self, username, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+#     def create_superuser(self, username, password=None, **extra_fields):
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
 
-        return self.create_user(username, password, **extra_fields)
+#         return self.create_user(username, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+# class User(AbstractBaseUser, PermissionsMixin):
+#     username = models.CharField(max_length=255, unique=True)
+#     password = models.CharField(max_length=255)
+#     is_active = models.BooleanField(default=True)
+#     is_staff = models.BooleanField(default=False)
+
+#     groups = models.ManyToManyField(Group, related_name='web_users')
+#     user_permissions = models.ManyToManyField(Permission, related_name='web_users')
+
+#     objects = UserManager()
+
+#     USERNAME_FIELD = 'username'
+#     class Meta:
+#         managed = True
+#         db_table = 'user'
+
+class User(models.Model):
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-
-    groups = models.ManyToManyField(Group, related_name='web_users')
-    user_permissions = models.ManyToManyField(Permission, related_name='web_users')
-
-    objects = UserManager()
-
-    USERNAME_FIELD = 'username'
+    
     class Meta:
         managed = True
         db_table = 'user'
+    
+    @property
+    def is_authenticated(self):
+        return True

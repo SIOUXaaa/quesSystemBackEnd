@@ -10,6 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 import pandas as pd
+from web.Authentication import MyJWTAuthentication
 from web.models import Project, SurveyResponses
 from web.serializers.SurveyResponses import SurveyResponsesSerializer
 from django.utils import timezone
@@ -25,7 +26,7 @@ class Pagination(PageNumberPagination):
 # Create your views here.
 class SurveyResponsesView(APIView):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [MyJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -71,4 +72,3 @@ class SurveyResponsesView(APIView):
             return Response({'msg:': 'success'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-

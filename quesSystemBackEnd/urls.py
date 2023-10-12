@@ -21,6 +21,8 @@ from web.views.Project import ProjectView
 from web.views.Excel import ExcelView
 from web.views.User import *
 
+from web.Authentication import MyTokenObtainPairView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('surveyResponses/get/', SurveyResponsesView.as_view()),
@@ -31,6 +33,6 @@ urlpatterns = [
     path('project/put/', ProjectView.as_view()),
     path('project/delete/', ProjectView.as_view()),
     path('excel/get/', ExcelView.as_view()),
-    path('user/login/', LoginView.as_view()),
+    path('user/login/', MyTokenObtainPairView.as_view()),
     path('user/register/', RegisterView.as_view())
 ]

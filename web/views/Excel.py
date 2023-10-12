@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from web.Authentication import MyJWTAuthentication
 
 from web.models import SurveyResponses
 from django.http import StreamingHttpResponse
@@ -13,7 +14,7 @@ from django.http import StreamingHttpResponse
 
 class ExcelView(APIView):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [MyJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
