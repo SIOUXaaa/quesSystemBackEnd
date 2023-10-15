@@ -20,6 +20,7 @@ from web.views.SurveyResponses import SurveyResponsesView
 from web.views.Project import ProjectView
 from web.views.Excel import ExcelView
 from web.views.User import *
+from web.views.TokenValidation import TokenValidationView
 
 from web.Authentication import MyTokenObtainPairView
 
@@ -34,5 +35,6 @@ urlpatterns = [
     path('project/delete/', ProjectView.as_view()),
     path('excel/get/', ExcelView.as_view()),
     path('user/login/', MyTokenObtainPairView.as_view()),
-    path('user/register/', RegisterView.as_view())
+    path('user/register/', RegisterView.as_view()),
+    path('token/', TokenValidationView.as_view())
 ]

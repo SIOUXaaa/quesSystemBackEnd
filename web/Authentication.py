@@ -8,13 +8,12 @@ from django.utils.translation import gettext_lazy as _
 
 from web.models import User
 
-
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = 'username'
 
     def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
         authenticate_kwargs = {self.username_field: attrs[self.username_field], 'password': attrs['password']}
-        print("==========", authenticate_kwargs)
+        # print("==========", authenticate_kwargs)
         try:
             user = User.objects.get(**authenticate_kwargs)
         except Exception as e:

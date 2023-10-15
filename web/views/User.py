@@ -23,7 +23,7 @@ class LoginView(APIView):
             # user = authenticate(username=username, password=password)
             user = User.objects.get(username=username)
             if user.password == password:
-            # if user is not None:
+                # if user is not None:
                 token = generate_token(user)
                 return Response({'msg': 'success', 'token': token.get("access")}, status=status.HTTP_200_OK)
             else:

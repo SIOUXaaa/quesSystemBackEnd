@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import AllowAny
 
 import pandas as pd
 from web.Authentication import MyJWTAuthentication
@@ -29,6 +30,11 @@ class SurveyResponsesView(APIView):
     authentication_classes = [MyJWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [AllowAny()]
+        return super().get_permissions()
+    
     def get(self, request):
         project = request.GET.get('project')
         survey_responses = SurveyResponses.objects.all()
@@ -52,8 +58,7 @@ class SurveyResponsesView(APIView):
 
     def post(self, request):
         project = request.data.get('project')
-        print(request.data)
-        print(project)
+
         # 查询 project表是否存在project_id
         project = Project.objects.filter(pk=project)
         if not project:

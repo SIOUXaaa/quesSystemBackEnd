@@ -28,12 +28,14 @@ distro-info==0.23+ubuntu1.1
 Django==4.2.5
 django-cors-headers==4.2.0
 djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.0
 docker==4.1.0
 docker-compose==1.25.0
 dockerpty==0.4.1
 docopt==0.6.2
 duplicity==0.8.12.0
 entrypoints==0.3
+et-xmlfile==1.1.0
 fasteners==0.14.1
 filelock==3.12.3
 future==0.18.2
@@ -60,8 +62,11 @@ MarkupSafe==1.1.0
 monotonic==1.5
 more-itertools==4.2.0
 netifaces==0.10.4
+numpy==1.24.4
 oauthlib==3.1.0
 olefile==0.46
+openpyxl==3.1.2
+pandas==2.0.3
 paramiko==2.6.0
 pbr==5.11.1
 pexpect==4.6.0
@@ -89,10 +94,10 @@ pyRFC3339==1.1
 pyrsistent==0.15.5
 pyserial==3.4
 python-apt==2.0.1+ubuntu0.20.4.1
-python-dateutil==2.7.3
+python-dateutil==2.8.2
 python-debian==0.1.36+ubuntu1.1
 python-gnupg==0.4.5
-pytz==2019.3
+pytz==2023.3.post1
 pyxdg==0.26
 PyYAML==5.3.1
 reportlab==3.5.34
@@ -112,6 +117,7 @@ texttable==1.6.2
 tomli==2.0.1
 Twisted==18.9.0
 typing-extensions==4.7.1
+tzdata==2023.3
 ubuntu-advantage-tools==8001
 ubuntu-drivers-common==0.0.0
 Ubuntu-Make==18.9
